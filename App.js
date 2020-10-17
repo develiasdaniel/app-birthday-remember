@@ -6,6 +6,7 @@ import Auth from "./src/components/Auth";
 
 
 export default function App(){
+  
   const [user, setUser] = useState(undefined);
 
   useEffect( () => {
