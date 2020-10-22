@@ -10,16 +10,33 @@ import firebase from "../utils/firebase";
 
 export default function LoginForm(props){
     const {changeForm} = props;
-    const [formdata, setFormData] =useState(defaultValue())
+    const [formdata, setFormData] =useState(defaultValue());
+    const [formError, setFormError] =useState({})
 
     const login = () => {
-        console.log("iniciando sesión");
-        console.log(formdata)
+        let errors = {}
+        if(!formdata.email || !formdata.password){
+            if(!formdata.email) errors.email = true;            
+            if(!formdata.password) errors.password = true;            
+        }else if(!validateEmail(formdata.email)){
+            errors.email = true;
+        }else{             
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(formdata.email, formdata.password)
+                .then(() =>{
+                })
+                .catch( () =>{
+                    setFormError({
+                        email: true,
+                        password: true
+                    })
+                })
+        }
+        setFormError(errors);
     }
 
     const onChange = (e, type) => {
-        // console.log('data', e.nativeEvent.text);
-        // console.log('type',type)
         setFormData({
             ...formdata,
             [type]: e.nativeEvent.text
@@ -29,13 +46,13 @@ export default function LoginForm(props){
     return(
         <>
             <TextInput
-                style={styles.input}
+                style={[styles.input, formError.email && styles.error]}
                 placeholder="Correo electrónico"
                 placeholderTextColor="#969696"
                 onChange={(e) => {onChange(e, "email")}}
             />
             <TextInput
-                style={styles.input}
+                style={[styles.input, formError.password && styles.error]}
                 placeholder="Contraseña"
                 placeholderTextColor="#969696"
                 secureTextEntry={true}
@@ -81,5 +98,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         marginBottom: 20,
+    },
+    error: {
+        borderColor: "#940c0c"
     }
 });
