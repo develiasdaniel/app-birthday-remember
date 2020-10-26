@@ -5,14 +5,25 @@ import {
     StyleSheet
 } from 'react-native';
 import ActionBar from "./ActionBar";
-
+import AddBirthday from "./AddBirthday";
 
 
 export default function ListBirthday(){  
+  const [showList, setShowList] = useState(false);
   return(
     <View style={styles.container}>
-      <Text>Hola</Text>
-      <ActionBar />
+      {showList ? (
+        <>
+        <Text>List</Text>
+        <Text>List</Text>
+        <Text>List</Text>
+        <Text>List</Text>
+        </>
+      ) : (
+        <AddBirthday />
+      )
+      }      
+      <ActionBar showList={showList} setShowList={setShowList}/>
     </View>
   )
 }
