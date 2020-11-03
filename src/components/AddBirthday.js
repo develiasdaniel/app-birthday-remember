@@ -4,13 +4,18 @@ import {
   View,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import firebase from "../utils/firebase";
+import '@firebase/firestore';
 
+firebase.firestore().settings({experimentalForceLongPolling: true})
+const db = firebase.firestore(firebase);
 
-export default function AddBirthday() {
+export default function AddBirthday(props) {
+  const {user, setShowList} = props;
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [formData, setFormData] = useState({})
   const [formError, setFormError] = useState({});
@@ -49,7 +54,18 @@ export default function AddBirthday() {
       if(!formData.lastname) errors.lastname = true;
       if(!formData.dateBirth) errors.dateBirth = true;
     }else{
-      console.log("OK")
+      const data = formData;    
+      data.dateBirth.setYear(0);
+      db.collection(user.uid)
+        .add(data)
+        .then(() => {
+          console.log("OK")
+          setShowList(true);
+        })
+        .catch( ()=>{
+          setFormError({name: true, lastName: true, dateBirth: true})
+        }) 
+      console.log(data);
     }
     setFormError(errors);
   }

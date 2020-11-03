@@ -1,4 +1,5 @@
 import firebase from "@firebase/app";
+//import firebase from "@react-native-firebase/app";
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBl2B1xdDyywko7b0yR1sM5ko2oRhb9D08",
