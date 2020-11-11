@@ -15,7 +15,7 @@ firebase.firestore().settings({experimentalForceLongPolling: true})
 const db = firebase.firestore(firebase);
 
 export default function AddBirthday(props) {
-  const {user, setShowList} = props;
+  const {user, setShowList, setReloadData} = props;
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const [formData, setFormData] = useState({})
   const [formError, setFormError] = useState({});
@@ -60,6 +60,7 @@ export default function AddBirthday(props) {
         .add(data)
         .then(() => {
           console.log("OK")
+          setReloadData(true);
           setShowList(true);
         })
         .catch( ()=>{
